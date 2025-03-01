@@ -8,20 +8,20 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-
+import { User } from './user.entity';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   //유저 목록 조회
   @Get()
-  getUsers(): string[] {
+  getUsers(): Promise<User[]> {
     return this.userService.getUsers();
   }
 
   //유저 생성
   @Post()
-  addUser(@Body() body: { name: string }): string {
+  addUser(@Body() body: { name: string }): Promise<string> {
     return this.userService.addUser(body.name);
   }
 
@@ -29,12 +29,12 @@ export class UserController {
   updateUser(
     @Param('name') name: string,
     @Body() body: { newName: string },
-  ): string {
+  ): Promise<string> {
     return this.userService.updateUser(name, body.newName);
   }
 
   @Delete(':name')
-  deleteUser(@Param('name') name: string): string {
+  deleteUser(@Param('name') name: string): Promise<string> {
     return this.userService.deleteUser(name);
   }
 }

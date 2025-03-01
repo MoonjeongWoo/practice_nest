@@ -1,31 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
-  private users = ['kim', 'choi', 'park'];
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
-  getUsers(): string[] {
-    return this.users;
+  async getUsers(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
-  addUser(name: string): string {
-    this.users.push(name);
+  async addUser(name: string): Promise<string> {
+    await this.userRepository.save({ name });
     return `${name} 유저가 추가되었습니다.`;
   }
 
-  updateUser(name: string, newName: string): string {
-    const index = this.users.indexOf(name);
-    if (index !== -1) {
-      this.users[index] = newName;
-    }
+  async updateUser(name: string, newName: string): Promise<string> {
+    await this.userRepository.update(name, { name: newName });
     return `${name} 유저가 수정되었습니다.`;
   }
 
-  deleteUser(name: string): string {
-    const index = this.users.indexOf(name);
-    if (index !== -1) {
-      this.users.splice(index, 1);
-    }
+  async deleteUser(name: string): Promise<string> {
+    await this.userRepository.delete(name);
     return `${name} 유저가 삭제되었습니다.`;
   }
 }
