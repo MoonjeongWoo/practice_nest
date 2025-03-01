@@ -9,6 +9,9 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
+
+//Controller: 여기에서는 유저 관련 요청을 처리하는 역할을 한다.
+//ex)localhost:3000/user 요청이 들어오면 이 컨트롤러에서 처리한다.
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
